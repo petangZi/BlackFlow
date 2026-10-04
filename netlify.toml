@@ -6,7 +6,6 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
   included_files = ["netlify/lib/**/*"]
-  node_version = "20"
 
 [[edge_functions]]
   path = "/*"
