@@ -1,0 +1,79 @@
+[build]
+  publish = "."
+  command = "echo 'Static site - no build step'"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["netlify/lib/**/*"]
+
+[edge_functions]
+  directory = "netlify/edge-functions"
+  node_bundler = "esbuild"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.openai.com https://api.anthropic.com https://generativelanguage.googleapis.com https://api.groq.com https://openrouter.ai; frame-src 'self' blob:; worker-src 'self' blob:; manifest-src 'self';"
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Service-Worker-Allowed = "/"
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/v1/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/chat/*"
+  to = "/.netlify/edge-functions/chat/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/health-check"
+  status = 200
+
+[[redirects]]
+  from = "/dashboard/*"
+  to = "/index.html#/dashboard/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/index.html#/admin/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/docs/*"
+  to = "/index.html#/docs/:splat"
+  status = 200
+
+[functions.node_version]
+  20
+
+[edge_functions.node_version]
+  20
+
+[dev]
+  command = "npx serve . -l 8888"
+  port = 8888
+  target_port = 8888
+  publish = "."
