@@ -8,7 +8,7 @@
   included_files = ["netlify/lib/**/*"]
 
 [[edge_functions]]
-  path = "/*"
+  path = "/chat/*"
   function = "chat"
 
 [[headers]]
