@@ -13,21 +13,20 @@ import { RateLimiter } from '../lib/ratelimit/index.mjs';
 import { SSEParser, SSEWriter } from '../lib/utils/sse.mjs';
 import { logger } from '../lib/logger/index.mjs';
 
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL'),
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
-);
-
-const router = new Router(supabase);
-const keyVault = new KeyVault(supabase);
-const rateLimiter = new RateLimiter(supabase);
-
-// Config from environment
-const ROUTER_DEADLINE_MS = parseInt(Deno.env.get('ROUTER_DEADLINE_MS') || '55000');
-const TTFB_TIMEOUT_MS = parseInt(Deno.env.get('TTFB_TIMEOUT_MS') || '10000');
-const MAX_ATTEMPTS = parseInt(Deno.env.get('MAX_ATTEMPTS') || '6');
-
 export default async function handler(request, context) {
+  const supabase = createClient(
+    Deno.env.get('SUPABASE_URL'),
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  );
+
+  const router = new Router(supabase);
+  const keyVault = new KeyVault(supabase);
+  const rateLimiter = new RateLimiter(supabase);
+
+  // Config from environment
+  const ROUTER_DEADLINE_MS = parseInt(Deno.env.get('ROUTER_DEADLINE_MS') || '55000');
+  const TTFB_TIMEOUT_MS = parseInt(Deno.env.get('TTFB_TIMEOUT_MS') || '10000');
+  const MAX_ATTEMPTS = parseInt(Deno.env.get('MAX_ATTEMPTS') || '6');
   const requestId = crypto.randomUUID();
   const startTime = Date.now();
   const url = new URL(request.url);
