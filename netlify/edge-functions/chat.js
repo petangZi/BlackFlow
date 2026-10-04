@@ -6,7 +6,7 @@
  * Header deadline: 40s
  */
 
-import { createClient } from 'npm:@supabase/supabase-js@2';
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import { Router } from '../lib/router/index.mjs';
 import { KeyVault } from '../lib/auth/keyvault.mjs';
 import { RateLimiter } from '../lib/ratelimit/index.mjs';
